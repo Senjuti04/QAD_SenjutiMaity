@@ -1,0 +1,51 @@
+name: CI Security Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  security-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout Repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 2. Static Application Security Testing (SAST)
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: python  # change based on your repo's language
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+
+      # 3. Dependency Vulnerability Scan
+      - name: Dependency Scan (Snyk)
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        continue-on-error: true
+
+      # 4. Secrets Scanning
+      - name: Secrets Scan (Gitleaks)
+        uses: zricethezav/gitleaks-action@v2
+        with:
+          config: ".gitleaks.toml"
+        continue-on-error: false
+
+      # 5. IaC Security Scan
+      - name: Infrastructure-as-Code Scan (Checkov)
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: .
+        continue-on-error: true
+
+      # 6. Upload Results
+      - name: Upload Security Reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-reports
+          path: results/
