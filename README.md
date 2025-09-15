@@ -7,7 +7,6 @@ DevSecOps-integrated QA pipeline that runs SAST, DAST, dependency & IaC scanning
 ## 📂 Repository Overview
 - `Security_pipeline.md` – full solution design (goals, architecture, pseudocode, trade-offs)
 - `ci/` – sample CI/CD pipeline YAMLs (GitHub Actions-ready)
-- `diagrams/` – high-level architecture diagrams
 
 ## 📜 Why MIT License?
 This project is open-source for educational and reference purposes.  
