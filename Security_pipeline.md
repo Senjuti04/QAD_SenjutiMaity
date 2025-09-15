@@ -54,7 +54,17 @@ Use **policy-as-code** (OPA) to gate builds based on severity.
    → Full SAST + DAST + Automated PenTest
    → Security Dashboard + Alerts + Jira Tickets
 ```
-
+```mermaid
+flowchart TD
+    A[Code Commit] --> B[CI Security Pipeline]
+    B --> C[SAST]
+    B --> D[Dependency Scan]
+    B --> E[Secrets Scan]
+    C --> F[Deploy to Staging]
+    F --> G[Security Dashboard]
+    G --> H[Nightly Automated Pen-Testing]
+    H --> G
+```
 ---
 
 ## 6. Key Components & Tooling
